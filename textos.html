@@ -205,8 +205,8 @@ function saveKeys() {
 }
 
 function loadKeys() {
-  const ds = localStorage.getItem('ita_deepseek') || '';
-  const fal = localStorage.getItem('ita_fal') || '';
+  const ds = localStorage.getItem('ita_deepseek') || 'sk-cb3b577d96a14058a2575d36a882b72f';
+  const fal = localStorage.getItem('ita_fal') || 'fa5539e2-328e-431b-8cf3-7bfb833433e6:e82be4f28c488013857a29f5e50b73db';
   if (ds) document.getElementById('dsKey').value = ds;
   if (fal) document.getElementById('falKey').value = fal;
 }

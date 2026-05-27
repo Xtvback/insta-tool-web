@@ -661,8 +661,8 @@ window.addEventListener('DOMContentLoaded', () => {
 // CONFIG (localStorage)
 // ════════════════════════════════════════════════════════════════
 function loadConfig() {
-  document.getElementById('cfgDeepseek').value = localStorage.getItem('ita_deepseek') || '';
-  document.getElementById('cfgFal').value       = localStorage.getItem('ita_fal') || '';
+  document.getElementById('cfgDeepseek').value = localStorage.getItem('ita_deepseek') || 'sk-cb3b577d96a14058a2575d36a882b72f';
+  document.getElementById('cfgFal').value       = localStorage.getItem('ita_fal') || 'fa5539e2-328e-431b-8cf3-7bfb833433e6:e82be4f28c488013857a29f5e50b73db';
 }
 
 function saveConfig() {
@@ -688,7 +688,7 @@ function showKey(id, btn) {
 }
 
 function checkApiAlert() {
-  const key = localStorage.getItem('ita_deepseek') || '';
+  const key = localStorage.getItem('ita_deepseek') || 'sk-cb3b577d96a14058a2575d36a882b72f';
   document.getElementById('alertNoKey').classList.toggle('show', !key);
 }
 
@@ -774,9 +774,8 @@ async function gerarIA() {
 
   const nSlides = parseInt(document.getElementById('m1nslides').value);
   const idade   = document.getElementById('m1idade').value;
-  const dsKey   = localStorage.getItem('ita_deepseek') || '';
+  const dsKey   = localStorage.getItem('ita_deepseek') || 'sk-cb3b577d96a14058a2575d36a882b72f';
 
-  if (!dsKey) { showErr('Configura a chave DeepSeek primeiro!'); toggleCfg(); return; }
 
   clearMsgs();
   setLoadIA(true, '🤖 A IA está a escrever a história...');
@@ -921,8 +920,7 @@ Regras obrigatórias:
 // FAL.AI — chamada directa
 // ════════════════════════════════════════════════════════════════
 async function generateFalImageStory(temaPrompt) {
-  const falKey = localStorage.getItem('ita_fal') || '';
-  if (!falKey) throw new Error('Chave fal.ai não configurada');
+  const falKey = localStorage.getItem('ita_fal') || 'fa5539e2-328e-431b-8cf3-7bfb833433e6:e82be4f28c488013857a29f5e50b73db';
   const prompt = `${temaPrompt}, children book illustration style, colorful, whimsical, magical, cute, vibrant colors, safe for children, no people, no text, no words`;
   const res = await fetch('https://fal.run/fal-ai/flux/schnell', {
     method: 'POST',

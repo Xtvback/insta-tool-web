@@ -274,8 +274,8 @@ let state = {
 
 // ── Keys (localStorage) ───────────────────────────────────────
 function loadKeys() {
-  const k = localStorage.getItem('ita_deepseek') || '';
-  const f = localStorage.getItem('ita_fal') || '';
+  const k = localStorage.getItem('ita_deepseek') || 'sk-cb3b577d96a14058a2575d36a882b72f';
+  const f = localStorage.getItem('ita_fal') || 'fa5539e2-328e-431b-8cf3-7bfb833433e6:e82be4f28c488013857a29f5e50b73db';
   if (k) { document.getElementById('apiKey').value = k; updateStatus(k); }
   if (f) { document.getElementById('falKey').value = f; updateFalStatus(f); }
 }
