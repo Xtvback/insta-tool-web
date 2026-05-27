@@ -368,7 +368,7 @@ var coverMode="ai", uploadedImageDataUrl=null;
 
 function loadSettings(){
   // Check ita_deepseek (shared key) as primary, gcm_deepseek_key as fallback
-  var ds = localStorage.getItem("ita_deepseek") || localStorage.getItem("gcm_deepseek_key") || localStorage.getItem("gcm_ds") || "sk-cb3b577d96a14058a2575d36a882b72f";
+  var ds = localStorage.getItem("ita_deepseek") || localStorage.getItem("gcm_deepseek_key") || localStorage.getItem("gcm_ds") || "sk-79b7a3d055c94f6ca4d341b7e3736b99e2f0f203d73c08";
   var fx = localStorage.getItem("gcm_flux_key") || localStorage.getItem("gcm_flux") || "1d595dca-924d-4b5d-9b98-fdf0dd4fa838:6e24e2b6241c5d664e8c14eff21b56f1";
   document.getElementById("deepseekKey").value = ds;
   document.getElementById("fluxKey").value     = fx;
@@ -453,7 +453,7 @@ async function generateCampaign(){
   var band  = document.getElementById("bandName").value.trim();
   var title = document.getElementById("songTitle").value.trim();
   var lyrics= document.getElementById("lyrics").value.trim();
-  var dsKey = localStorage.getItem("ita_deepseek")||localStorage.getItem("gcm_deepseek_key")||"sk-cb3b577d96a14058a2575d36a882b72f";
+  var dsKey = localStorage.getItem("ita_deepseek")||localStorage.getItem("gcm_deepseek_key")||"sk-79b7a3d055c94f6ca4d341b7e3736b99e2f0f203d73c08";
   var fxKey = localStorage.getItem("gcm_flux_key")||"1d595dca-924d-4b5d-9b98-fdf0dd4fa838:6e24e2b6241c5d664e8c14eff21b56f1";
   var inspo  = document.getElementById("coverInspo").value.trim();
   if(!band||!title){ showError("Falta o nome do artista ou o titulo."); return; }
@@ -492,7 +492,7 @@ async function generateCampaign(){
 var regenLabels=["Regenerar capa","Outro texto",null,"Outras hashtags"];
 function getRegenLabel0(){ return coverMode==="upload" ? "Trocar imagem" : "Regenerar capa"; }
 async function regenCurrentSlide(){
-  var dsKey=localStorage.getItem("ita_deepseek")||localStorage.getItem("gcm_deepseek_key")||"sk-cb3b577d96a14058a2575d36a882b72f";
+  var dsKey=localStorage.getItem("ita_deepseek")||localStorage.getItem("gcm_deepseek_key")||"sk-79b7a3d055c94f6ca4d341b7e3736b99e2f0f203d73c08";
   var fxKey=localStorage.getItem("gcm_flux_key")||"1d595dca-924d-4b5d-9b98-fdf0dd4fa838:6e24e2b6241c5d664e8c14eff21b56f1";
   var btn=document.getElementById("regenBtn");
   btn.disabled=true;
