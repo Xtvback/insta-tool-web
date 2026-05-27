@@ -97,6 +97,20 @@ const AUTH_KEY = 'ita_auth';
 const CODE = '2387';
 
 window.onload = function() {
+  // Link de configuração de chaves: ?s=BASE64
+  const params = new URLSearchParams(window.location.search);
+  const s = params.get('s');
+  if (s) {
+    try {
+      const decoded = atob(s);
+      const parts = decoded.split('|');
+      if (parts[0]) localStorage.setItem('ita_deepseek', parts[0]);
+      if (parts[1]) localStorage.setItem('ita_fal', parts[1]);
+      if (parts[2]) localStorage.setItem('gcm_flux_key', parts[2]);
+    } catch(e) {}
+    // Limpar o URL para não expor as chaves no histórico
+    history.replaceState(null, '', window.location.pathname);
+  }
   if (sessionStorage.getItem(AUTH_KEY) === '1') showMenu();
 };
 
