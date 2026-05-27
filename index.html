@@ -96,8 +96,19 @@
 const AUTH_KEY = 'ita_auth';
 const CODE = '2387';
 
+// Chaves activas — actualizadas automaticamente em todos os dispositivos
+const DS_KEY  = 'sk-f5f7b81476bf46f189c6742d323593c6';
+const FAL_KEY = 'fa5539e2-328e-431b-8cf3-7bfb833433e6:e82be4f28c488013857a29f5e50b73db';
+const FLX_KEY = '1d595dca-924d-4b5d-9b98-fdf0dd4fa838:6e24e2b6241c5d664e8c14eff21b56f1';
+
 window.onload = function() {
-  // Link de configuração de chaves: ?s=BASE64
+  // Sempre actualiza o localStorage com as chaves correctas
+  localStorage.setItem('ita_deepseek', DS_KEY);
+  localStorage.setItem('ita_fal', FAL_KEY);
+  localStorage.setItem('gcm_flux_key', FLX_KEY);
+  localStorage.setItem('gcm_deepseek_key', DS_KEY);
+
+  // Link de configuração de chaves: ?s=BASE64 (override manual)
   const params = new URLSearchParams(window.location.search);
   const s = params.get('s');
   if (s) {
@@ -108,7 +119,6 @@ window.onload = function() {
       if (parts[1]) localStorage.setItem('ita_fal', parts[1]);
       if (parts[2]) localStorage.setItem('gcm_flux_key', parts[2]);
     } catch(e) {}
-    // Limpar o URL para não expor as chaves no histórico
     history.replaceState(null, '', window.location.pathname);
   }
   if (sessionStorage.getItem(AUTH_KEY) === '1') showMenu();
