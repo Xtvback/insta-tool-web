@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Insta Tool · Acesso</title>
+<style>
+  :root {
+    --bg:#0d0d0d;--surface:#1a1a1a;--surface2:#222;--border:#2e2e2e;
+    --accent:#a855f7;--accent2:#7c3aed;--accent-soft:rgba(168,85,247,0.12);
+    --text:#f0f0f0;--muted:#888;--green:#22c55e;--red:#ef4444;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px}
+  .login-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:40px 36px;width:100%;max-width:400px;text-align:center}
+  .login-logo{font-size:3rem;margin-bottom:16px}
+  .login-title{font-size:1.5rem;font-weight:700;margin-bottom:6px}
+  .login-sub{font-size:0.85rem;color:var(--muted);margin-bottom:32px}
+  .pin-input{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:10px;color:var(--text);padding:14px;font-size:1.4rem;text-align:center;letter-spacing:0.5rem;outline:none;font-family:monospace;transition:border-color 0.2s}
+  .pin-input:focus{border-color:var(--accent)}
+  .pin-error{color:var(--red);font-size:0.82rem;margin-top:10px;min-height:20px}
+  .btn-enter{width:100%;margin-top:18px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:white;border:none;border-radius:10px;padding:14px;font-size:1rem;font-weight:700;cursor:pointer;font-family:inherit;transition:opacity 0.2s}
+  .btn-enter:hover{opacity:0.9}
+
+  .menu{display:none;width:100%;max-width:680px}
+  .menu-header{text-align:center;margin-bottom:32px}
+  .menu-header .logo{font-size:2.5rem;margin-bottom:10px}
+  .menu-header h1{font-size:1.6rem;font-weight:800}
+  .menu-header p{font-size:0.85rem;color:var(--muted);margin-top:6px}
+  .tools-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+  .tool-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:22px;text-decoration:none;color:var(--text);transition:all 0.2s;display:block}
+  .tool-card:hover{border-color:var(--accent);background:rgba(168,85,247,0.06);transform:translateY(-2px)}
+  .tool-card .icon{font-size:2rem;margin-bottom:10px}
+  .tool-card h2{font-size:1rem;font-weight:700;margin-bottom:4px}
+  .tool-card p{font-size:0.78rem;color:var(--muted);line-height:1.5}
+  .tool-card .badge{display:inline-block;margin-top:10px;font-size:0.68rem;padding:3px 10px;border-radius:20px;background:var(--accent-soft);color:var(--accent);font-weight:700}
+  .logout{margin-top:28px;text-align:center}
+  .logout button{background:none;border:1px solid var(--border);color:var(--muted);padding:7px 16px;border-radius:8px;cursor:pointer;font-size:0.8rem;font-family:inherit}
+  .logout button:hover{border-color:var(--red);color:var(--red)}
+</style>
+</head>
+<body>
+
+<div class="login-card" id="loginCard">
+  <div class="login-logo">🔐</div>
+  <div class="login-title">Insta Tool</div>
+  <div class="login-sub">Introduz o código de acesso</div>
+  <input class="pin-input" type="password" id="codeInput" maxlength="8" placeholder="····" autocomplete="off"
+    onkeydown="if(event.key==='Enter')doLogin()" oninput="document.getElementById('pinErr').textContent=''" />
+  <div class="pin-error" id="pinErr"></div>
+  <button class="btn-enter" onclick="doLogin()">Entrar</button>
+</div>
+
+<div class="menu" id="menuDiv">
+  <div class="menu-header">
+    <div class="logo">📱</div>
+    <h1>Insta Tool</h1>
+    <p>Seleciona a ferramenta que queres usar</p>
+  </div>
+  <div class="tools-grid">
+    <a class="tool-card" href="frases.html">
+      <div class="icon">💬</div>
+      <h2>Carrossel de Frases</h2>
+      <p>Gera uma frase famosa com imagem de fundo e slide do autor</p>
+      <span class="badge">2 slides · DeepSeek + fal.ai</span>
+    </a>
+    <a class="tool-card" href="textos.html">
+      <div class="icon">🎨</div>
+      <h2>Gerador de Carrosseis</h2>
+      <p>Texto dividido em 4 partes com imagem de capa</p>
+      <span class="badge">5 slides · DeepSeek + fal.ai</span>
+    </a>
+    <a class="tool-card" href="story.html">
+      <div class="icon">📖</div>
+      <h2>Mini Histórias</h2>
+      <p>História em 6 partes com abertura, clímax e encerramento</p>
+      <span class="badge">7 slides · DeepSeek + fal.ai</span>
+    </a>
+    <a class="tool-card" href="historias.html">
+      <div class="icon">🌟</div>
+      <h2>Histórias Infantis</h2>
+      <p>Carrosseis coloridos para crianças com modo mágico, IA e manual</p>
+      <span class="badge">Variável · DeepSeek + fal.ai</span>
+    </a>
+    <a class="tool-card" href="musical.html">
+      <div class="icon">🎵</div>
+      <h2>Carrossel Musical</h2>
+      <p>Legenda e carrossel para publicações de música no Instagram</p>
+      <span class="badge">4 slides · DeepSeek + BFL</span>
+    </a>
+  </div>
+  <div class="logout"><button onclick="logout()">Sair</button></div>
+</div>
+
+<script>
+const AUTH_KEY = 'ita_auth';
+const CODE = '2387';
+
+window.onload = function() {
+  if (sessionStorage.getItem(AUTH_KEY) === '1') showMenu();
+};
+
+function doLogin() {
+  const v = document.getElementById('codeInput').value.trim();
+  if (v === CODE) {
+    sessionStorage.setItem(AUTH_KEY, '1');
+    showMenu();
+  } else {
+    document.getElementById('pinErr').textContent = 'Código incorreto. Tenta de novo.';
+    document.getElementById('codeInput').value = '';
+    document.getElementById('codeInput').focus();
+  }
+}
+
+function showMenu() {
+  document.getElementById('loginCard').style.display = 'none';
+  document.getElementById('menuDiv').style.display = 'block';
+}
+
+function logout() {
+  sessionStorage.removeItem(AUTH_KEY);
+  document.getElementById('menuDiv').style.display = 'none';
+  document.getElementById('loginCard').style.display = 'block';
+  document.getElementById('codeInput').value = '';
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mini Histórias · Instagram</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Segoe UI',Arial,sans-serif;background:#0f0f1a;color:#e8e4f5;min-height:100vh;padding:0 0 60px}
+  header{background:linear-gradient(135deg,#1a1040 0%,#0d0d20 100%);padding:18px 24px;display:flex;align-items:center;gap:14px;border-bottom:1px solid #2a2050;position:sticky;top:0;z-index:100}
+  header .logo{font-size:28px}
+  header h1{font-size:1.15rem;font-weight:700;color:#c8b8f8}
+  header .desc{font-size:0.78rem;color:#8878b8;margin-top:2px}
+  header .back{margin-left:auto;background:none;border:1px solid #3a2a6a;color:#a898d8;padding:7px 16px;border-radius:8px;cursor:pointer;font-size:0.82rem;transition:all .2s}
+  header .back:hover{background:#2a1a50;color:#c8b8f8}
+  .container{max-width:700px;margin:0 auto;padding:24px 16px}
+  .card{background:#16122a;border:1px solid #2a2050;border-radius:14px;padding:22px;margin-bottom:20px}
+  .card h2{font-size:1rem;font-weight:600;color:#c8b8f8;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+  label{display:block;font-size:0.82rem;color:#9888c8;margin-bottom:5px;margin-top:12px}
+  label:first-child{margin-top:0}
+  input[type=text],input[type=password],textarea{width:100%;background:#0d0a1a;border:1px solid #2a2050;border-radius:8px;padding:10px 13px;color:#e8e4f5;font-size:0.88rem;outline:none;transition:border .2s;font-family:inherit}
+  input[type=text]:focus,input[type=password]:focus,textarea:focus{border-color:#6a4ac8}
+  textarea{resize:vertical;min-height:80px;line-height:1.5}
+  .key-row{display:flex;gap:8px;align-items:center}
+  .key-row input{flex:1}
+  .key-note{font-size:0.73rem;color:#6858a8;margin-top:4px}
+  .btn{display:inline-flex;align-items:center;gap:7px;padding:10px 22px;border-radius:9px;border:none;cursor:pointer;font-size:0.9rem;font-weight:600;transition:all .2s}
+  .btn-primary{background:linear-gradient(135deg,#6a3ac8,#a040c8);color:#fff}
+  .btn-primary:hover{background:linear-gradient(135deg,#7a4ad8,#b050d8);transform:translateY(-1px)}
+  .btn-primary:disabled{background:#2a2050;color:#5a5080;cursor:not-allowed;transform:none}
+  .btn-secondary{background:#1e1840;border:1px solid #3a2a6a;color:#b8a8e8}
+  .btn-secondary:hover{background:#2a2050;border-color:#5a4a90}
+  .btn-danger{background:#2a1020;border:1px solid #5a1a40;color:#d07090}
+  .btn-danger:hover{background:#3a1830}
+  .btn-sm{padding:6px 14px;font-size:0.8rem}
+  .btn-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+  .slide-preview{background:#0d0a1a;border:1px solid #2a2050;border-radius:10px;padding:16px;margin-bottom:12px}
+  .slide-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+  .slide-badge{background:#2a1a50;color:#a888e8;font-size:0.72rem;font-weight:600;padding:3px 10px;border-radius:20px}
+  .slide-text{font-size:0.88rem;color:#c8c0e0;line-height:1.6;white-space:pre-wrap}
+  .hashtags-box{background:#0d0a1a;border:1px solid #1e1840;border-radius:8px;padding:12px 14px;margin-top:10px;font-size:0.83rem;color:#8878c8;word-break:break-word}
+  .status{font-size:0.82rem;color:#8878b8;margin-top:10px;min-height:18px}
+  .status.err{color:#d06080}
+  .status.ok{color:#60c890}
+  .spinner{display:inline-block;width:14px;height:14px;border:2px solid #4a3a80;border-top-color:#a070e0;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:6px}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .img-options{display:flex;gap:10px;margin:10px 0}
+  .img-opt{flex:1;background:#0d0a1a;border:2px solid #2a2050;border-radius:10px;padding:14px;text-align:center;cursor:pointer;transition:all .2s;font-size:0.83rem;color:#9888c8}
+  .img-opt:hover{border-color:#5a3a90}
+  .img-opt.active{border-color:#8a50e0;background:#1a1035;color:#c8a8f8}
+  .img-opt .icon{font-size:1.6rem;display:block;margin-bottom:6px}
+  .section-hidden{display:none}
+  .canvas-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;margin-top:12px}
+  .canvas-grid img{width:100%;border-radius:8px;border:1px solid #2a2050;display:block}
+  .canvas-grid .slide-num{font-size:0.7rem;color:#6858a8;text-align:center;margin-top:4px}
+  .dl-links{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+  .dl-link{display:flex;align-items:center;justify-content:space-between;background:#0d0a1a;border:1px solid #1e1840;border-radius:8px;padding:10px 14px}
+  .dl-link span{font-size:0.82rem;color:#9888c8}
+  .dl-link a{color:#a070e0;font-size:0.82rem;text-decoration:none;font-weight:600}
+  .dl-link a:hover{color:#c090f0;text-decoration:underline}
+  .progress{height:4px;background:#1a1535;border-radius:2px;margin-top:10px;overflow:hidden}
+  .progress-bar{height:100%;background:linear-gradient(90deg,#6a3ac8,#a040c8);width:0%;transition:width .4s}
+  .full-text-box{background:#0d0a1a;border:1px solid #1e1840;border-radius:8px;padding:14px;font-size:0.85rem;color:#b8b0d0;line-height:1.7;white-space:pre-wrap;margin-top:10px;max-height:220px;overflow-y:auto}
+  .copy-btn{font-size:0.75rem;padding:4px 12px}
+  hr{border:none;border-top:1px solid #1e1840;margin:16px 0}
+</style>
+</head>
+<body>
+<header>
+  <span class="logo">📖</span>
+  <div>
+    <h1>Mini Histórias · Instagram</h1>
+    <div class="desc">História gerada por IA · Imagem no slide 1 · Texto nos slides 2–7</div>
+  </div>
+  <button class="back btn" onclick="window.location.href='index.html'">← Voltar</button>
+</header>
+
+<div class="container">
+
+  <!-- API Keys -->
+  <div class="card">
+    <h2>🔑 Chaves API</h2>
+    <label>DeepSeek API Key</label>
+    <div class="key-row">
+      <input type="password" id="dsKey" placeholder="sk-..." oninput="saveKeys()">
+    </div>
+    <label style="margin-top:10px">fal.ai API Key</label>
+    <div class="key-row">
+      <input type="password" id="falKey" placeholder="fal-ai-..." oninput="saveKeys()">
+    </div>
+    <div class="key-note">Guardada neste browser (localStorage) · Nunca enviada para servidores externos</div>
+  </div>
+
+  <!-- Step 1: Input -->
+  <div class="card" id="stepInput">
+    <h2>✏️ Passo 1 — Título e Ideia da História</h2>
+    <label>Título do post (aparece no slide 1)</label>
+    <input type="text" id="titulo" placeholder="Ex: A noite em que decidi ficar">
+    <label>História a contar nas 6 partes</label>
+    <textarea id="tema" rows="3" placeholder="Ex: Uma noite de insónia em que percebi que a vida que estava a viver não era a minha..."></textarea>
+    <div class="btn-row">
+      <button class="btn btn-primary" id="btnGerar" onclick="gerarTexto()">📖 Gerar História</button>
+    </div>
+    <div class="status" id="statusGerar"></div>
+  </div>
+
+  <!-- Step 2: Text Preview -->
+  <div class="card section-hidden" id="stepTexto">
+    <h2>📝 Passo 2 — História Gerada</h2>
+    <div id="slidesPrev"></div>
+    <div id="hashtagsPrev" class="hashtags-box" style="display:none"></div>
+    <hr>
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+      <span style="font-size:0.82rem;color:#7868a8">Texto completo (para copiar)</span>
+      <button class="btn btn-secondary copy-btn" onclick="copyFullText()">📋 Copiar</button>
+    </div>
+    <div class="full-text-box" id="fullText"></div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="avancarParaImagem()">🖼️ Continuar → Imagem de Capa</button>
+      <button class="btn btn-danger btn-sm" onclick="reiniciar()">↺ Nova história</button>
+    </div>
+  </div>
+
+  <!-- Step 3: Image -->
+  <div class="card section-hidden" id="stepImagem">
+    <h2>🖼️ Passo 3 — Imagem de Capa (Slide 1)</h2>
+    <div class="img-options">
+      <div class="img-opt active" id="optAI" onclick="selectImgOpt('ai')">
+        <span class="icon">🤖</span>
+        Gerar com IA<br><small style="color:#6858a8">fal.ai / FLUX</small>
+      </div>
+      <div class="img-opt" id="optUpload" onclick="selectImgOpt('upload')">
+        <span class="icon">📂</span>
+        Upload da minha galeria
+      </div>
+    </div>
+
+    <div id="aiSection">
+      <label>Prompt para a imagem (ou deixa em branco para usar o título)</label>
+      <input type="text" id="imgPrompt" placeholder="Ex: dramatic candlelit room at night, cinematic, moody atmosphere...">
+      <div class="btn-row">
+        <button class="btn btn-primary" id="btnGerarImg" onclick="gerarImagem()">🎨 Gerar Imagem</button>
+      </div>
+      <div class="status" id="statusImg"></div>
+      <div id="imgPreviewAI" style="margin-top:12px;display:none">
+        <img id="imgPreviewAIEl" style="max-width:100%;border-radius:8px;border:1px solid #2a2050">
+      </div>
+    </div>
+
+    <div id="uploadSection" style="display:none">
+      <label>Seleciona uma imagem do teu dispositivo</label>
+      <input type="file" id="imgFile" accept="image/*" onchange="previewUpload()" style="color:#9888c8;margin-top:6px">
+      <div id="imgPreviewUpload" style="margin-top:12px;display:none">
+        <img id="imgPreviewUploadEl" style="max-width:100%;border-radius:8px;border:1px solid #2a2050">
+      </div>
+    </div>
+
+    <div class="btn-row" style="margin-top:16px">
+      <button class="btn btn-primary" id="btnGerarSlides" onclick="gerarTodosSlides()" disabled>⚡ Gerar Todos os Slides</button>
+    </div>
+    <div class="status" id="statusSlides"></div>
+    <div class="progress" id="progressWrap" style="display:none"><div class="progress-bar" id="progressBar"></div></div>
+  </div>
+
+  <!-- Step 4: Download -->
+  <div class="card section-hidden" id="stepDownload">
+    <h2>⬇️ Passo 4 — Transferir Slides</h2>
+    <p style="font-size:0.83rem;color:#7868a8;margin-bottom:4px">7 slides prontos · slide 1 = capa · slides 2–7 = história</p>
+    <div class="canvas-grid" id="canvasGrid"></div>
+    <div class="dl-links" id="dlLinks"></div>
+    <div class="btn-row" style="margin-top:16px">
+      <button class="btn btn-secondary" onclick="downloadAll()">⬇️ Transferir Todos</button>
+      <button class="btn btn-danger btn-sm" onclick="reiniciar()">↺ Nova história</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ─── Auth ───────────────────────────────────────────────
+if (sessionStorage.getItem('ita_auth') !== '1') window.location.href = 'index.html';
+
+// ─── Constants ─────────────────────────────────────────
+const TOTAL_SLIDES = 7;
+const NUM_TEXT_SLIDES = 6;
+const BADGES = ['Abertura','Desenvolvimento 1','Desenvolvimento 2','Clímax','Resolução','Encerramento'];
+
+// ─── State ─────────────────────────────────────────────
+const state = {
+  titulo: '',
+  tema: '',
+  textSlides: [],
+  hashtags: '',
+  bgSrc: null,
+  imgOpt: 'ai',
+  generatedSlides: []
+};
+
+// ─── API Key persistence ────────────────────────────────
+function saveKeys() {
+  const ds = document.getElementById('dsKey').value.trim();
+  const fal = document.getElementById('falKey').value.trim();
+  if (ds) localStorage.setItem('ita_deepseek', ds);
+  if (fal) localStorage.setItem('ita_fal', fal);
+}
+
+function loadKeys() {
+  const ds = localStorage.getItem('ita_deepseek') || '';
+  const fal = localStorage.getItem('ita_fal') || '';
+  if (ds) document.getElementById('dsKey').value = ds;
+  if (fal) document.getElementById('falKey').value = fal;
+}
+
+// ─── Canvas utilities ───────────────────────────────────
+function wrapText(ctx, text, maxWidth) {
+  const words = text.split(/\s+/);
+  const lines = []; let cur = [];
+  for (const w of words) {
+    const test = [...cur, w].join(' ');
+    if (ctx.measureText(test).width > maxWidth && cur.length) { lines.push(cur.join(' ')); cur = [w]; }
+    else cur.push(w);
+  }
+  if (cur.length) lines.push(cur.join(' '));
+  return lines.filter(l => l.trim());
+}
+
+function drawDots(ctx, W, H, current, total) {
+  const pillW=28, dotD=9, gap=7;
+  const totalW = pillW + (total-1)*(dotD+gap);
+  let x = (W-totalW)/2;
+  const y = H-46;
+  for (let i=0; i<total; i++) {
+    if (i===current-1) {
+      ctx.fillStyle='rgba(255,255,255,1)';
+      const r=dotD/2;
+      ctx.beginPath();
+      ctx.moveTo(x+r,y); ctx.lineTo(x+pillW-r,y);
+      ctx.quadraticCurveTo(x+pillW,y,x+pillW,y+r);
+      ctx.lineTo(x+pillW,y+dotD-r);
+      ctx.quadraticCurveTo(x+pillW,y+dotD,x+pillW-r,y+dotD);
+      ctx.lineTo(x+r,y+dotD);
+      ctx.quadraticCurveTo(x,y+dotD,x,y+dotD-r);
+      ctx.lineTo(x,y+r);
+      ctx.quadraticCurveTo(x,y,x+r,y);
+      ctx.closePath(); ctx.fill();
+      x+=pillW+gap;
+    } else {
+      ctx.fillStyle='rgba(255,255,255,0.25)';
+      ctx.beginPath(); ctx.arc(x+dotD/2,y+dotD/2,dotD/2,0,Math.PI*2); ctx.fill();
+      x+=dotD+gap;
+    }
+  }
+}
+
+function shadowText(ctx, x, y, text, off=3) {
+  ctx.fillStyle='rgba(0,0,0,0.63)'; ctx.fillText(text,x+off,y+off);
+  ctx.fillStyle='white'; ctx.fillText(text,x,y);
+}
+
+function loadImg(src) {
+  return new Promise((res,rej)=>{
+    const img=new Image(); img.crossOrigin='anonymous';
+    img.onload=()=>res(img); img.onerror=rej; img.src=src;
+  });
+}
+
+async function makeCoverSlide(bgSrc, titulo, total) {
+  const S=1080, PAD=80;
+  const canvas=document.createElement('canvas');
+  canvas.width=canvas.height=S;
+  const ctx=canvas.getContext('2d');
+  if (bgSrc) {
+    const img=await loadImg(bgSrc);
+    const sc=Math.max(S/img.width,S/img.height);
+    const sw=img.width*sc, sh=img.height*sc;
+    ctx.drawImage(img,(S-sw)/2,(S-sh)/2,sw,sh);
+    ctx.fillStyle='rgba(0,0,0,0.55)'; ctx.fillRect(0,0,S,S);
+    const grad=ctx.createLinearGradient(0,S/2,0,S);
+    grad.addColorStop(0,'rgba(0,0,0,0)');
+    grad.addColorStop(1,'rgba(0,0,0,0.82)');
+    ctx.fillStyle=grad; ctx.fillRect(0,S/2,S,S/2);
+  } else {
+    ctx.fillStyle='#0d0d0d'; ctx.fillRect(0,0,S,S);
+  }
+  let fs=92; ctx.font=`italic ${fs}px Georgia,serif`;
+  let lines=wrapText(ctx,titulo,S-PAD*2);
+  if(lines.length>3){fs=72;ctx.font=`italic ${fs}px Georgia,serif`;lines=wrapText(ctx,titulo,S-PAD*2);}
+  if(lines.length>4){fs=58;ctx.font=`italic ${fs}px Georgia,serif`;lines=wrapText(ctx,titulo,S-PAD*2);}
+  const lh=fs+10, blockH=lines.length*lh;
+  let yT=S-blockH-120;
+  ctx.fillStyle='rgba(255,255,255,0.7)'; ctx.fillRect(PAD,yT-22,55,2);
+  for(const line of lines){shadowText(ctx,PAD,yT+fs,line,3);yT+=lh;}
+  drawDots(ctx,S,S,1,total);
+  return canvas.toDataURL('image/png').split(',')[1];
+}
+
+function makeTextSlide(texto, num, total, colorIdx) {
+  const S=1080, PAD=90;
+  const canvas=document.createElement('canvas');
+  canvas.width=canvas.height=S;
+  const ctx=canvas.getContext('2d');
+  const bgs=['rgb(10,8,22)','rgb(7,11,26)','rgb(20,8,8)','rgb(7,18,12)','rgb(18,10,5)','rgb(5,15,20)'];
+  ctx.fillStyle=bgs[colorIdx%bgs.length]; ctx.fillRect(0,0,S,S);
+  let fs=54; ctx.font=`italic ${fs}px Georgia,serif`;
+  let lines=wrapText(ctx,texto,S-PAD*2);
+  if(lines.length>7){fs=46;ctx.font=`italic ${fs}px Georgia,serif`;lines=wrapText(ctx,texto,S-PAD*2);}
+  if(lines.length>9){fs=40;ctx.font=`italic ${fs}px Georgia,serif`;lines=wrapText(ctx,texto,S-PAD*2);}
+  const lh=fs+24, blockH=lines.length*lh;
+  let y=(S-blockH)/2;
+  ctx.fillStyle='rgb(232,228,245)';
+  for(const line of lines){if(y+lh>S-80)break;ctx.fillText(line,PAD,y+fs);y+=lh;}
+  drawDots(ctx,S,S,num,total);
+  return canvas.toDataURL('image/png').split(',')[1];
+}
+
+// ─── DeepSeek call ──────────────────────────────────────
+async function callDeepSeek(prompt) {
+  const key = document.getElementById('dsKey').value.trim();
+  if (!key) throw new Error('Insere a tua DeepSeek API Key.');
+  const resp = await fetch('https://api.deepseek.com/v1/chat/completions', {
+    method: 'POST',
+    headers: {'Authorization': 'Bearer '+key, 'Content-Type': 'application/json'},
+    body: JSON.stringify({
+      model: 'deepseek-chat',
+      max_tokens: 2048,
+      temperature: 0.7,
+      messages: [{role:'user', content: prompt}]
+    })
+  });
+  if (!resp.ok) {
+    const err = await resp.text();
+    throw new Error('Erro DeepSeek ('+resp.status+'): '+err.slice(0,200));
+  }
+  const data = await resp.json();
+  return data.choices[0].message.content;
+}
+
+// ─── fal.ai call ────────────────────────────────────────
+async function callFal(prompt) {
+  const falKey = document.getElementById('falKey').value.trim();
+  if (!falKey) throw new Error('Insere a tua fal.ai API Key.');
+  const resp = await fetch('https://fal.run/fal-ai/flux/schnell', {
+    method: 'POST',
+    headers: {'Authorization': 'Key '+falKey, 'Content-Type': 'application/json'},
+    body: JSON.stringify({prompt: prompt, image_size:'square_hd', num_inference_steps:8, num_images:1})
+  });
+  if (!resp.ok) {
+    const err = await resp.text();
+    throw new Error('Erro fal.ai ('+resp.status+'): '+err.slice(0,200));
+  }
+  const data = await resp.json();
+  return data.images[0].url;
+}
+
+// ─── Step 1: Generate story ─────────────────────────────
+async function gerarTexto() {
+  const titulo = document.getElementById('titulo').value.trim();
+  const tema = document.getElementById('tema').value.trim();
+  if (!titulo) { setStatus('statusGerar', 'Insere o título do post.', 'err'); return; }
+  if (!tema) { setStatus('statusGerar', 'Descreve a história a contar.', 'err'); return; }
+
+  state.titulo = titulo;
+  state.tema = tema;
+
+  const btn = document.getElementById('btnGerar');
+  btn.disabled = true;
+  setStatus('statusGerar', '<span class="spinner"></span>A gerar história com IA...', '');
+
+  const prompt = `Es um escritor de mini historias para Instagram. Vais escrever uma historia unica dividida em 6 partes consecutivas para um carrossel de 7 slides.
+
+Titulo do post (aparece no slide 1, nao o alteres): "${titulo}"
+
+Historia a contar nas 6 partes:
+"${tema}"
+
+Estrutura OBRIGATORIA das 6 partes:
+- Parte 1 (slide 2) - Abertura: o gancho, a cena inicial que prende o leitor imediatamente
+- Parte 2 (slide 3) - Desenvolvimento 1: a historia avanca, o leitor entra no mundo da personagem
+- Parte 3 (slide 4) - Desenvolvimento 2: aprofundamento, tensao a crescer
+- Parte 4 (slide 5) - Climax: o momento de maior tensao ou virada, o ponto de nao retorno
+- Parte 5 (slide 6) - Resolucao: o que acontece depois, como a situacao se resolve ou muda
+- Parte 6 (slide 7) - Encerramento: a reflexao final, a moral, o pensamento que fica
+
+Regras de escrita OBRIGATORIAS:
+- Portugues europeu, proximo e simples
+- Todo o texto na primeira pessoa do singular: "eu", "mim", "me", "meu", "minha"
+- Nunca uses "voce", "seu", "sua", "te", "tu" para te referires ao leitor
+- Usa sempre o mesmo tempo verbal em todas as 6 partes (de preferencia presente do indicativo)
+- Nunca mudes de pessoa nem de tempo verbal entre partes
+- Sem expressoes de inteligencia artificial
+- Sem travessoes (—)
+- Sem ponto e virgula (;)
+- Sem dois pontos (:)
+- Virgulas, pontos finais e reticencias sao bem-vindos — usa-os normalmente
+- As 6 partes formam uma historia continua, a leitura de uma parte para a seguinte deve fluir de forma natural
+- Cada parte tem entre 3 e 5 linhas
+- Exatamente 3 hashtags especificas e relevantes, com o simbolo #
+
+Responde EXCLUSIVAMENTE em JSON valido, sem texto extra, sem markdown:
+{
+  "slides": [
+    {"texto": "..."},
+    {"texto": "..."},
+    {"texto": "..."},
+    {"texto": "..."},
+    {"texto": "..."},
+    {"texto": "..."}
+  ],
+  "hashtags": "#hashtag1 #hashtag2 #hashtag3"
+}`;
+
+  try {
+    let raw = await callDeepSeek(prompt);
+    raw = raw.replace(/```json\s*/gi,'').replace(/```\s*/g,'').trim();
+    const parsed = JSON.parse(raw);
+    state.textSlides = parsed.slides;
+    state.hashtags = parsed.hashtags || '';
+    renderTextPreview();
+    show('stepTexto');
+    setStatus('statusGerar', '', '');
+  } catch(e) {
+    setStatus('statusGerar', 'Erro: '+e.message, 'err');
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+function renderTextPreview() {
+  const container = document.getElementById('slidesPrev');
+  container.innerHTML = '';
+  state.textSlides.forEach((slide, i) => {
+    const div = document.createElement('div');
+    div.className = 'slide-preview';
+    div.innerHTML = `
+      <div class="slide-header">
+        <span class="slide-badge">Slide ${i+2} · ${BADGES[i]}</span>
+        <button class="btn btn-secondary btn-sm" onclick="regenarSlide(${i})">🔄 Regenerar</button>
+      </div>
+      <div class="slide-text" id="slideText${i}">${escHtml(slide.texto)}</div>`;
+    container.appendChild(div);
+  });
+
+  const hbox = document.getElementById('hashtagsPrev');
+  if (state.hashtags) {
+    hbox.textContent = state.hashtags;
+    hbox.style.display = 'block';
+  }
+
+  buildFullText();
+}
+
+function buildFullText() {
+  const lines = state.textSlides.map((s,i) => `— ${BADGES[i]} —\n${s.texto}`).join('\n\n');
+  const full = lines + (state.hashtags ? '\n\n'+state.hashtags : '');
+  document.getElementById('fullText').textContent = full;
+}
+
+async function regenarSlide(idx) {
+  const btn = document.querySelectorAll('.slide-preview .btn-secondary')[idx];
+  btn.disabled = true;
+  btn.textContent = '⏳';
+
+  const otherSlides = state.textSlides
+    .map((s,i) => i === idx ? null : `${BADGES[i]}: ${s.texto}`)
+    .filter(Boolean).join('\n\n');
+
+  const estrutura = [
+    'Abertura: o gancho inicial que prende o leitor',
+    'Desenvolvimento 1: a historia avanca, entra no mundo da personagem',
+    'Desenvolvimento 2: aprofundamento, tensao a crescer',
+    'Climax: o momento de maior tensao ou virada',
+    'Resolucao: o que acontece depois, como se resolve',
+    'Encerramento: a reflexao final, o pensamento que fica'
+  ];
+
+  const prompt = `Es um escritor de mini historias para Instagram. Tens uma historia de 6 partes e precisas de reescrever APENAS a parte "${BADGES[idx]}".
+
+Titulo do post: "${state.titulo}"
+Historia original: "${state.tema}"
+
+As outras partes ja escritas (para contexto e continuidade):
+${otherSlides}
+
+Reescreve APENAS a parte "${BADGES[idx]}" seguindo:
+- Funcao desta parte: ${estrutura[idx]}
+- Portugues europeu, primeira pessoa do singular
+- Sem travessoes (—), sem ponto e virgula (;), sem dois pontos (:)
+- Entre 3 e 5 linhas
+- Deve continuar naturalmente da parte anterior e levar bem para a seguinte
+
+Responde EXCLUSIVAMENTE em JSON valido:
+{"texto": "..."}`;
+
+  try {
+    let raw = await callDeepSeek(prompt);
+    raw = raw.replace(/```json\s*/gi,'').replace(/```\s*/g,'').trim();
+    const parsed = JSON.parse(raw);
+    state.textSlides[idx].texto = parsed.texto;
+    document.getElementById('slideText'+idx).textContent = parsed.texto;
+    buildFullText();
+  } catch(e) {
+    alert('Erro ao regenerar: '+e.message);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '🔄 Regenerar';
+  }
+}
+
+function copyFullText() {
+  const txt = document.getElementById('fullText').textContent;
+  navigator.clipboard.writeText(txt).then(()=>{ showToast('Texto copiado!'); }).catch(()=>{});
+}
+
+function avancarParaImagem() {
+  show('stepImagem');
+  document.getElementById('stepImagem').scrollIntoView({behavior:'smooth'});
+}
+
+// ─── Step 3: Image ──────────────────────────────────────
+function selectImgOpt(opt) {
+  state.imgOpt = opt;
+  document.getElementById('optAI').classList.toggle('active', opt==='ai');
+  document.getElementById('optUpload').classList.toggle('active', opt==='upload');
+  document.getElementById('aiSection').style.display = opt==='ai' ? '' : 'none';
+  document.getElementById('uploadSection').style.display = opt==='upload' ? '' : 'none';
+  document.getElementById('btnGerarSlides').disabled = true;
+  state.bgSrc = null;
+}
+
+async function gerarImagem() {
+  const prompt = document.getElementById('imgPrompt').value.trim() || state.titulo;
+  const btn = document.getElementById('btnGerarImg');
+  btn.disabled = true;
+  setStatus('statusImg', '<span class="spinner"></span>A gerar imagem...', '');
+
+  try {
+    const url = await callFal(prompt);
+    state.bgSrc = url;
+    const prev = document.getElementById('imgPreviewAI');
+    document.getElementById('imgPreviewAIEl').src = url;
+    prev.style.display = 'block';
+    document.getElementById('btnGerarSlides').disabled = false;
+    setStatus('statusImg', '✓ Imagem gerada!', 'ok');
+  } catch(e) {
+    setStatus('statusImg', 'Erro: '+e.message, 'err');
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+function previewUpload() {
+  const file = document.getElementById('imgFile').files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    state.bgSrc = e.target.result;
+    document.getElementById('imgPreviewUploadEl').src = e.target.result;
+    document.getElementById('imgPreviewUpload').style.display = 'block';
+    document.getElementById('btnGerarSlides').disabled = false;
+  };
+  reader.readAsDataURL(file);
+}
+
+// ─── Step 4: Generate all slides ───────────────────────
+async function gerarTodosSlides() {
+  const btn = document.getElementById('btnGerarSlides');
+  btn.disabled = true;
+  setStatus('statusSlides', '<span class="spinner"></span>A gerar slides...', '');
+  const prog = document.getElementById('progressWrap');
+  const bar = document.getElementById('progressBar');
+  prog.style.display = 'block';
+  bar.style.width = '0%';
+
+  try {
+    state.generatedSlides = [];
+
+    // Slide 1: cover
+    setStatus('statusSlides', '<span class="spinner"></span>Slide 1 — Capa...', '');
+    bar.style.width = '8%';
+    const coverB64 = await makeCoverSlide(state.bgSrc, state.titulo, TOTAL_SLIDES);
+    state.generatedSlides.push({num:1, label:'Capa', b64: coverB64});
+    bar.style.width = '20%';
+
+    // Slides 2–7: story parts
+    for (let i = 0; i < NUM_TEXT_SLIDES; i++) {
+      setStatus('statusSlides', `<span class="spinner"></span>Slide ${i+2} — ${BADGES[i]}...`, '');
+      const b64 = makeTextSlide(state.textSlides[i].texto, i+2, TOTAL_SLIDES, i);
+      state.generatedSlides.push({num:i+2, label:BADGES[i], b64});
+      bar.style.width = (20 + (i+1)/NUM_TEXT_SLIDES*80)+'%';
+    }
+
+    bar.style.width = '100%';
+    renderDownload();
+    show('stepDownload');
+    document.getElementById('stepDownload').scrollIntoView({behavior:'smooth'});
+    setStatus('statusSlides', '✓ Todos os slides gerados!', 'ok');
+  } catch(e) {
+    setStatus('statusSlides', 'Erro: '+e.message, 'err');
+    btn.disabled = false;
+  }
+}
+
+function renderDownload() {
+  const grid = document.getElementById('canvasGrid');
+  const links = document.getElementById('dlLinks');
+  grid.innerHTML = '';
+  links.innerHTML = '';
+
+  state.generatedSlides.forEach(slide => {
+    const src = 'data:image/png;base64,'+slide.b64;
+    const wrapDiv = document.createElement('div');
+    wrapDiv.innerHTML = `<img src="${src}" alt="Slide ${slide.num}"><div class="slide-num">Slide ${slide.num} · ${slide.label}</div>`;
+    grid.appendChild(wrapDiv);
+
+    const row = document.createElement('div');
+    row.className = 'dl-link';
+    const a = document.createElement('a');
+    a.href = src;
+    a.download = `slide_${slide.num}_${slide.label.toLowerCase().replace(/\s+/g,'_').replace(/[^\w_]/g,'')}.png`;
+    a.textContent = '⬇️ Transferir';
+    row.innerHTML = `<span>Slide ${slide.num} · ${slide.label}</span>`;
+    row.appendChild(a);
+    links.appendChild(row);
+  });
+}
+
+function downloadAll() {
+  state.generatedSlides.forEach((slide, idx) => {
+    setTimeout(() => {
+      const a = document.createElement('a');
+      a.href = 'data:image/png;base64,'+slide.b64;
+      a.download = `slide_${slide.num}_${slide.label.toLowerCase().replace(/\s+/g,'_').replace(/[^\w_]/g,'')}.png`;
+      a.click();
+    }, idx * 400);
+  });
+}
+
+// ─── Helpers ────────────────────────────────────────────
+function show(id) {
+  document.getElementById(id).classList.remove('section-hidden');
+}
+
+function hide(id) {
+  document.getElementById(id).classList.add('section-hidden');
+}
+
+function setStatus(id, msg, type) {
+  const el = document.getElementById(id);
+  el.innerHTML = msg;
+  el.className = 'status' + (type ? ' '+type : '');
+}
+
+function escHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function showToast(msg) {
+  const t = document.createElement('div');
+  t.textContent = msg;
+  t.style.cssText = 'position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#2a1a50;color:#c8b8f8;padding:10px 22px;border-radius:20px;font-size:0.85rem;z-index:9999;pointer-events:none;box-shadow:0 4px 20px rgba(0,0,0,0.5)';
+  document.body.appendChild(t);
+  setTimeout(()=>t.remove(), 2200);
+}
+
+function reiniciar() {
+  state.titulo=''; state.tema=''; state.textSlides=[]; state.hashtags=''; state.bgSrc=null; state.generatedSlides=[];
+  document.getElementById('titulo').value='';
+  document.getElementById('tema').value='';
+  document.getElementById('imgPrompt').value='';
+  document.getElementById('imgFile').value='';
+  document.getElementById('statusGerar').innerHTML='';
+  document.getElementById('statusImg').innerHTML='';
+  document.getElementById('statusSlides').innerHTML='';
+  hide('stepTexto'); hide('stepImagem'); hide('stepDownload');
+  document.getElementById('stepInput').scrollIntoView({behavior:'smooth'});
+}
+
+// ─── Init ────────────────────────────────────────────────
+loadKeys();
+</script>
+</body>
+</html>
