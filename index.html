@@ -21,7 +21,6 @@
   .pin-error{color:var(--red);font-size:0.82rem;margin-top:10px;min-height:20px}
   .btn-enter{width:100%;margin-top:18px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:white;border:none;border-radius:10px;padding:14px;font-size:1rem;font-weight:700;cursor:pointer;font-family:inherit;transition:opacity 0.2s}
   .btn-enter:hover{opacity:0.9}
-
   .menu{display:none;width:100%;max-width:680px}
   .menu-header{text-align:center;margin-bottom:32px}
   .menu-header .logo{font-size:2.5rem;margin-bottom:10px}
@@ -40,7 +39,6 @@
 </style>
 </head>
 <body>
-
 <div class="login-card" id="loginCard">
   <div class="login-logo">🔐</div>
   <div class="login-title">Insta Tool</div>
@@ -50,7 +48,6 @@
   <div class="pin-error" id="pinErr"></div>
   <button class="btn-enter" onclick="doLogin()">Entrar</button>
 </div>
-
 <div class="menu" id="menuDiv">
   <div class="menu-header">
     <div class="logo">📱</div>
@@ -58,95 +55,34 @@
     <p>Seleciona a ferramenta que queres usar</p>
   </div>
   <div class="tools-grid">
-    <a class="tool-card" href="frases.html">
-      <div class="icon">💬</div>
-      <h2>Carrossel de Frases</h2>
-      <p>Gera uma frase famosa com imagem de fundo e slide do autor</p>
-      <span class="badge">2 slides · DeepSeek + fal.ai</span>
-    </a>
-    <a class="tool-card" href="textos.html">
-      <div class="icon">🎨</div>
-      <h2>Gerador de Carrosseis</h2>
-      <p>Texto dividido em 4 partes com imagem de capa</p>
-      <span class="badge">5 slides · DeepSeek + fal.ai</span>
-    </a>
-    <a class="tool-card" href="story.html">
-      <div class="icon">📖</div>
-      <h2>Mini Histórias</h2>
-      <p>História em 6 partes com abertura, clímax e encerramento</p>
-      <span class="badge">7 slides · DeepSeek + fal.ai</span>
-    </a>
-    <a class="tool-card" href="historias.html">
-      <div class="icon">🌟</div>
-      <h2>Histórias Infantis</h2>
-      <p>Carrosseis coloridos para crianças com modo mágico, IA e manual</p>
-      <span class="badge">Variável · DeepSeek + fal.ai</span>
-    </a>
-    <a class="tool-card" href="musical.html">
-      <div class="icon">🎵</div>
-      <h2>Carrossel Musical</h2>
-      <p>Legenda e carrossel para publicações de música no Instagram</p>
-      <span class="badge">4 slides · DeepSeek + BFL</span>
-    </a>
+    <a class="tool-card" href="frases.html"><div class="icon">💬</div><h2>Carrossel de Frases</h2><p>Gera uma frase famosa com imagem de fundo e slide do autor</p><span class="badge">2 slides · DeepSeek + fal.ai</span></a>
+    <a class="tool-card" href="textos.html"><div class="icon">🎨</div><h2>Gerador de Carrosseis</h2><p>Texto dividido em 4 partes com imagem de capa</p><span class="badge">5 slides · DeepSeek + fal.ai</span></a>
+    <a class="tool-card" href="story.html"><div class="icon">📖</div><h2>Mini Histórias</h2><p>História em 6 partes com abertura, clímax e encerramento</p><span class="badge">7 slides · DeepSeek + fal.ai</span></a>
+    <a class="tool-card" href="historias.html"><div class="icon">🌟</div><h2>Histórias Infantis</h2><p>Carrosseis coloridos para crianças com modo mágico, IA e manual</p><span class="badge">Variável · DeepSeek + fal.ai</span></a>
+    <a class="tool-card" href="musical.html"><div class="icon">🎵</div><h2>Carrossel Musical</h2><p>Legenda e carrossel para publicações de música no Instagram</p><span class="badge">4 slides · DeepSeek + BFL</span></a>
+    <a class="tool-card" href="musical-manual.html"><div class="icon">✏️</div><h2>Carrossel Musical Manual</h2><p>Escreve o conteúdo de cada slide à tua vontade, sem IA</p><span class="badge">4 slides · Sem API</span></a>
   </div>
   <div class="logout"><button onclick="logout()">Sair</button></div>
 </div>
-
 <script>
-const AUTH_KEY = 'ita_auth';
-const CODE = '2387';
-
-// Chaves activas — actualizadas automaticamente em todos os dispositivos
-const DS_KEY  = 'sk-f5f7b81476bf46f189c6742d323593c6';
-const FAL_KEY = 'fa5539e2-328e-431b-8cf3-7bfb833433e6:e82be4f28c488013857a29f5e50b73db';
-const FLX_KEY = '1d595dca-924d-4b5d-9b98-fdf0dd4fa838:6e24e2b6241c5d664e8c14eff21b56f1';
-
-window.onload = function() {
-  // Sempre actualiza o localStorage com as chaves correctas
-  localStorage.setItem('ita_deepseek', DS_KEY);
-  localStorage.setItem('ita_fal', FAL_KEY);
-  localStorage.setItem('gcm_flux_key', FLX_KEY);
-  localStorage.setItem('gcm_deepseek_key', DS_KEY);
-
-  // Link de configuração de chaves: ?s=BASE64 (override manual)
-  const params = new URLSearchParams(window.location.search);
-  const s = params.get('s');
-  if (s) {
-    try {
-      const decoded = atob(s);
-      const parts = decoded.split('|');
-      if (parts[0]) localStorage.setItem('ita_deepseek', parts[0]);
-      if (parts[1]) localStorage.setItem('ita_fal', parts[1]);
-      if (parts[2]) localStorage.setItem('gcm_flux_key', parts[2]);
-    } catch(e) {}
-    history.replaceState(null, '', window.location.pathname);
-  }
-  if (sessionStorage.getItem(AUTH_KEY) === '1') showMenu();
+const AUTH_KEY='ita_auth';
+const CODE='2387';
+const DS_KEY='sk-f5f7b81476bf46f189c6742d323593c6';
+const FAL_KEY='fa5539e2-328e-431b-8cf3-7bfb833433e6:e82be4f28c488013857a29f5e50b73db';
+const FLX_KEY='1d595dca-924d-4b5d-9b98-fdf0dd4fa838:6e24e2b6241c5d664e8c14eff21b56f1';
+window.onload=function(){
+  localStorage.setItem('ita_deepseek',DS_KEY);
+  localStorage.setItem('ita_fal',FAL_KEY);
+  localStorage.setItem('gcm_flux_key',FLX_KEY);
+  localStorage.setItem('gcm_deepseek_key',DS_KEY);
+  const params=new URLSearchParams(window.location.search);
+  const s=params.get('s');
+  if(s){try{const decoded=atob(s);const parts=decoded.split('|');if(parts[0])localStorage.setItem('ita_deepseek',parts[0]);if(parts[1])localStorage.setItem('ita_fal',parts[1]);if(parts[2])localStorage.setItem('gcm_flux_key',parts[2]);}catch(e){}history.replaceState(null,'',window.location.pathname);}
+  if(sessionStorage.getItem(AUTH_KEY)==='1')showMenu();
 };
-
-function doLogin() {
-  const v = document.getElementById('codeInput').value.trim();
-  if (v === CODE) {
-    sessionStorage.setItem(AUTH_KEY, '1');
-    showMenu();
-  } else {
-    document.getElementById('pinErr').textContent = 'Código incorreto. Tenta de novo.';
-    document.getElementById('codeInput').value = '';
-    document.getElementById('codeInput').focus();
-  }
-}
-
-function showMenu() {
-  document.getElementById('loginCard').style.display = 'none';
-  document.getElementById('menuDiv').style.display = 'block';
-}
-
-function logout() {
-  sessionStorage.removeItem(AUTH_KEY);
-  document.getElementById('menuDiv').style.display = 'none';
-  document.getElementById('loginCard').style.display = 'block';
-  document.getElementById('codeInput').value = '';
-}
+function doLogin(){const v=document.getElementById('codeInput').value.trim();if(v===CODE){sessionStorage.setItem(AUTH_KEY,'1');showMenu();}else{document.getElementById('pinErr').textContent='Código incorreto. Tenta de novo.';document.getElementById('codeInput').value='';document.getElementById('codeInput').focus();}}
+function showMenu(){document.getElementById('loginCard').style.display='none';document.getElementById('menuDiv').style.display='block';}
+function logout(){sessionStorage.removeItem(AUTH_KEY);document.getElementById('menuDiv').style.display='none';document.getElementById('loginCard').style.display='block';document.getElementById('codeInput').value='';}
 </script>
 </body>
 </html>
